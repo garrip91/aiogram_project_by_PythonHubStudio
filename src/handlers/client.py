@@ -2,12 +2,16 @@ from aiogram import types, Dispatcher
 
 from create_bot import dp, bot
 
+from keyboards import kb_client
+
+from aiogram.types import ReplyKeyboardRemove
+
 
 
 # @dp.message_handler(commands=['start', 'help'])
 async def command_start(message: types.Message):
     try:
-        await bot.send_message(message.from_user.id, 'Приятного аппетита!') # ответ бота личным сообщением
+        await bot.send_message(message.from_user.id, 'Приятного аппетита!', reply_markup=kb_client) # ответ бота личным сообщением
         await message.delete()
     except:
         await message.reply('Общение с ботом через ЛС, напишите ему:\nhttps://t.me/garrip91_bot') # ответ бота с цитированием
@@ -18,7 +22,7 @@ async def pizza_open_command(message: types.Message):
 
 # @dp.message_handler(commands=['Расположение'])
 async def pizza_place_command(message: types.Message):
-    await bot.send_message(message.from_user.id, 'ул. Колбасная, 15') # ответ бота личным сообщением
+    await bot.send_message(message.from_user.id, 'ул. Колбасная, 15', reply_markup=ReplyKeyboardRemove()) # ответ бота личным сообщением
 
 # @dp.message_handler(commands=['Меню'])
 # async def pizza_menu_command(message: types.Message):
