@@ -49,7 +49,7 @@ async def load_price(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['price'] = float(message.text)
 
-    async with state.proxy as data:
+    async with state.proxy() as data:
         await message.reply(str(data))
 
     await state.finish()
@@ -58,7 +58,7 @@ async def load_price(message: types.Message, state: FSMContext):
 # Регистрируем хендлеры:
 def register_handlers_admin(dp: Dispatcher):
     dp.register_message_handler(cm_start, commands=['Загрузить'], state=None)
-    dp.register_message_handler(load_photo, content_types=['photo'], state=FSMAdmin.photo)
-    dp.register_message_handler(load_name, state=FSMAdmin.name)
-    dp.register_message_handler(load_description, state=FSMAdmin.description)
-    dp.register_message_handler(load_price, state=FSMAdmin.price)
+    dp.register_message_handler(load_photo, content_types=['photo'], state=FSMAdmin.photo.state)
+    dp.register_message_handler(load_name, state=FSMAdmin.name.state)
+    dp.register_message_handler(load_description, state=FSMAdmin.description.state)
+    dp.register_message_handler(load_price, state=FSMAdmin.price.state)
