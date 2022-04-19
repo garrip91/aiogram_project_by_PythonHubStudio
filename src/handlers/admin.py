@@ -3,6 +3,8 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram import types, Dispatcher
 from create_bot import dp
 
+from aiogram.dispatcher.filters import Text
+
 
 
 class FSMAdmin(StatesGroup):
@@ -48,11 +50,19 @@ async def load_description(message: types.Message, state: FSMContext):
 async def load_price(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['price'] = float(message.text)
-
     async with state.proxy() as data:
         await message.reply(str(data))
-
     await state.finish()
+
+# Выход из состояний:
+#@dp.message_handler(state="*", commands='Отмена')
+#@dp.message_handler(Text(equals='Отмена', ignore_case=True), state="*")
+async def cancel_handler(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state is None:
+        return
+    await state.finish()
+    await message.reply('ОК')
 
 
 # Регистрируем хендлеры:
@@ -62,3 +72,5 @@ def register_handlers_admin(dp: Dispatcher):
     dp.register_message_handler(load_name, state=FSMAdmin.name.state)
     dp.register_message_handler(load_description, state=FSMAdmin.description.state)
     dp.register_message_handler(load_price, state=FSMAdmin.price.state)
+    dp.register_message_handler(cancel_handler, state="*", commands='Отмена')
+    dp.register_message_handler(cancel_handler, Text(equals='Отмена', ignore_case=True), state="*")
