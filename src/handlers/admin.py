@@ -15,6 +15,14 @@ class FSMAdmin(StatesGroup):
     price = State()
 
 
+# Получаем ID текущего модератора:
+@dp.message_handler(commands=['Moderator'], is_chat_admin=True)
+async def make_changes_command(message: types.Message):
+    global ID
+    ID = message.from_user.id
+    await bot.send_message(message.from_user.id, 'Что надо, хозяин?')#, reply_markup=button_case_admin)
+    await message.delete()
+
 # Начало диалога загрузки нового пункта меню:
 #@dp.message_handler(commands='Загрузить', state=None)
 async def cm_start(message: types.Message):
