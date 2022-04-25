@@ -32,6 +32,17 @@ async def cm_start(message: types.Message):
         await FSMAdmin.photo.set()
         await message.reply('Загрузите фото!')
 
+# Выход из состояний:
+#@dp.message_handler(state="*", commands='Отмена')
+#@dp.message_handler(Text(equals='Отмена', ignore_case=True), state="*")
+async def cancel_handler(message: types.Message, state: FSMContext):
+    if message.from_user.id == ID:
+        current_state = await state.get_state()
+        if current_state is None:
+            return
+        await state.finish()
+        await message.reply('ОК')
+
 # Ловим первый ответ и пишем в словарь:
 #@dp.message_handler(content_types=['photo'], state=FSMAdmin.photo)
 async def load_photo(message: types.Message, state: FSMContext):
@@ -68,17 +79,6 @@ async def load_price(message: types.Message, state: FSMContext):
         async with state.proxy() as data:
             await message.reply(str(data))
         await state.finish()
-
-# Выход из состояний:
-#@dp.message_handler(state="*", commands='Отмена')
-#@dp.message_handler(Text(equals='Отмена', ignore_case=True), state="*")
-async def cancel_handler(message: types.Message, state: FSMContext):
-    if message.from_user.id == ID:
-        current_state = await state.get_state()
-        if current_state is None:
-            return
-        await state.finish()
-        await message.reply('ОК')
 
 
 # Регистрируем хендлеры:
