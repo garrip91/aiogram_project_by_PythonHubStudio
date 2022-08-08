@@ -1,5 +1,4 @@
 import environ
-from config import TOKEN, ADMIN
 
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
